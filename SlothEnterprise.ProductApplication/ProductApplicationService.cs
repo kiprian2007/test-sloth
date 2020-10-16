@@ -21,11 +21,11 @@ namespace SlothEnterprise.ProductApplication
 
         public int SubmitApplicationFor(ISellerApplication application)
         {
-            if(application == null)
+            if (application == null)
             {
                 throw new ArgumentNullException("Application should have a value");
             }
-            if(application.CompanyData == null)
+            if (application.CompanyData == null)
             {
                 throw new ArgumentNullException("CompanyData should have a value");
             }
@@ -38,34 +38,33 @@ namespace SlothEnterprise.ProductApplication
                 case ConfidentialInvoiceDiscount cid:
                     {
                         var result = _confidentialInvoiceWebService.SubmitApplicationFor(
-                     new CompanyDataRequest
-                     {
-                         CompanyFounded = application.CompanyData.Founded,
-                         CompanyNumber = application.CompanyData.Number,
-                         CompanyName = application.CompanyData.Name,
-                         DirectorName = application.CompanyData.DirectorName
-                     }, cid.TotalLedgerNetworth, cid.AdvancePercentage, cid.VatRate);
+                    CreateCompanyDataRequest(application.CompanyData), cid.TotalLedgerNetworth, cid.AdvancePercentage, cid.VatRate);
 
                         return (result.Success) ? result.ApplicationId ?? -1 : -1;
                     }
 
                 case BusinessLoans loans:
                     {
-                        var result = _businessLoansService.SubmitApplicationFor(new CompanyDataRequest
-                        {
-                            CompanyFounded = application.CompanyData.Founded,
-                            CompanyNumber = application.CompanyData.Number,
-                            CompanyName = application.CompanyData.Name,
-                            DirectorName = application.CompanyData.DirectorName
-                        }, new LoansRequest
-                        {
-                            InterestRatePerAnnum = loans.InterestRatePerAnnum,
-                            LoanAmount = loans.LoanAmount
-                        });
+                        var result = _businessLoansService.SubmitApplicationFor(CreateCompanyDataRequest(application.CompanyData),
+                            new LoansRequest
+                            {
+                                InterestRatePerAnnum = loans.InterestRatePerAnnum,
+                                LoanAmount = loans.LoanAmount
+                            });
                         return (result.Success) ? result.ApplicationId ?? -1 : -1;
                     }
                 default: throw new ArgumentOutOfRangeException();
             }
+        }
+        private CompanyDataRequest CreateCompanyDataRequest(ISellerCompanyData companyData)
+        {
+            return new CompanyDataRequest
+            {
+                CompanyFounded = companyData.Founded,
+                CompanyNumber = companyData.Number,
+                CompanyName = companyData.Name,
+                DirectorName = companyData.DirectorName
+            };
         }
     }
 }
