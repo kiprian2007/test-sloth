@@ -64,7 +64,7 @@ namespace SlothEnterprise.ProductApplication
                         });
                         return (result.Success) ? result.ApplicationId ?? -1 : -1;
                     }
-                default: throw new InvalidOperationException();
+                default: throw new ArgumentOutOfRangeException();
             }
         }
     }
