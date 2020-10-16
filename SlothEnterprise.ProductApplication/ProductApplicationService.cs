@@ -21,6 +21,15 @@ namespace SlothEnterprise.ProductApplication
 
         public int SubmitApplicationFor(ISellerApplication application)
         {
+            if(application == null)
+            {
+                throw new ArgumentNullException("Application should have a value");
+            }
+            if(application.CompanyData == null)
+            {
+                throw new ArgumentNullException("CompanyData should have a value");
+            }
+
             switch (application.Product)
             {
                 case SelectiveInvoiceDiscount sid:
