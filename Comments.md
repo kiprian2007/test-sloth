@@ -24,3 +24,5 @@ We should probably add some logging mechanism, for trace a debug purposes.
 
 VatRates could be a Enum instead of a static properties.
 
+All the applications probably should have private setters for security purposes
+
